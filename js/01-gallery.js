@@ -24,14 +24,50 @@ function createGalleryMarkup(galleryItems) {
     
 }
 
-// import basicLightbox from 'basiclightbox'
 
-// const instance = basicLightbox.create(`
-//     <img src="https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825_1280.jpg',
-//     width="800" height="600">
-// `)
 
-// instance.show()
+galleryContainer.addEventListener('click', onGalleryImgClick);
+
+function onGalleryImgClick(event) {
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  event.preventDefault();
+  modalShow(event.target.dataset.source);
+}
+let instance;
+function modalShow(src) {
+  instance = basicLightbox.create(
+    `
+    <div class="modal">
+        <img src="${src}" style="height:100vh; display:block"></img>
+    </div>
+`,
+    {
+      onShow: instance => {
+        addListener();
+      },
+      onClose: instance => {
+        removeListener();
+      },
+    },
+  );
+  instance.show();
+}
+
+function addListener() {
+  window.addEventListener('keydown', onEscClick);
+}
+
+function onEscClick(event) {
+  if (event.code === 'Escape') {
+    instance.close();
+  }
+}
+
+function removeListener() {
+  window.removeEventListener('keydown', onEscClick);
+}
 
 
 
